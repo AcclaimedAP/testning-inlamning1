@@ -3,8 +3,8 @@
 Syftet med detta repo är att det skall fungera som er kod som ni får given. Ni skall inte ändra på funktionaliteten som nu finns på något sätt. För att komma igång med inlämningen behöver ni göra följande:
 
 - Klona ner repot till er dator
-- Flytta över repot till en ny mapp som är er egen
-- Skapa ett nytt gitrepo av er egna mapp
+- Ta bort .git-mappen
+- Skapa ett nytt gitrepo åt er själva
 
 ## Gör er bekväm med koden
 
