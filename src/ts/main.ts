@@ -1,3 +1,4 @@
+import { addTodo, changeTodo, removeAllTodos } from "./functions";
 import { Todo } from "./models/Todo";
 
 let todos: Todo[] = JSON.parse(localStorage.getItem("todos") || "[]");
@@ -21,14 +22,12 @@ document.getElementById("clearTodos")?.addEventListener("click", () => {
 );
 
 function createNewTodo(todoText: string, todos: Todo[]) {
-  if (todoText.length > 2) {
-    displayError("", false);
-    let newTodo = new Todo(todoText, false);
-    todos.push(newTodo);
+  let result = addTodo(todoText, todos);
 
+  if (result.success) {
     createHtml(todos);
   } else {
-    displayError("Du måste skriva in minst tre tecken som uppgift", true);
+    displayError(result.error, true);
   }
 }
 
@@ -59,7 +58,7 @@ function createHtml(todos: Todo[]) {
 }
 
 function toggleTodo(todo: Todo) {
-  todo.done = !todo.done;
+  changeTodo(todo);
   createHtml(todos);
 }
 
@@ -78,7 +77,7 @@ function displayError(error: string, show: boolean) {
 }
 
 function clearTodos(todos: Todo[]) {
-  todos.splice(0, todos.length);
+  removeAllTodos(todos);
   createHtml(todos);
 }
 
