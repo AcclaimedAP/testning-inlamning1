@@ -23,12 +23,15 @@ beforeEach(() => {
 test("Check if form exist", () => {
   const form = document.getElementById("newTodoForm") as HTMLFormElement;
   expect(form).toBeDefined();
+  const preventDefault = jest.fn();
   const spy = jest.spyOn(form, "addEventListener");
+
   form.addEventListener("submit", (e) => {
-    e.preventDefault();
+    preventDefault();
   });
   form.dispatchEvent(new Event("submit"));
   expect(spy).toBeCalled();
+  expect(preventDefault).toBeCalled();
   spy.mockClear();
 });
 
