@@ -23,26 +23,35 @@ beforeEach(() => {
 test("Check if form exist", () => {
   const form = document.getElementById("newTodoForm") as HTMLFormElement;
   expect(form).toBeDefined();
+  const spy = jest.spyOn(form, "addEventListener");
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+  });
+  form.dispatchEvent(new Event("submit"));
+  expect(spy).toBeCalled();
+  spy.mockClear();
 });
 
 // Clear button
 test("check if clear button exists, and clearTodos is called on button click", () => {
   const button = document.getElementById("clearTodos");
+  let todos: Todo[] = [];
   // Setup
   if (button) {
     const spy = jest.spyOn(button, "addEventListener");
-
-    const clearTodosMock = jest.fn();
+    const spytwo = jest.spyOn(main, "clearTodos");
+    // const clearTodosMock = jest.fn();
     button.addEventListener("click", () => {
-      clearTodosMock();
+      main.clearTodos(todos);
     });
     expect(button).toBeDefined();
     expect(spy).toHaveBeenCalled();
-    expect(clearTodosMock).not.toHaveBeenCalled();
+    expect(spytwo).not.toHaveBeenCalled();
     button.dispatchEvent(new Event("click"));
-    expect(clearTodosMock).toHaveBeenCalledWith();
+    expect(spytwo).toHaveBeenCalled();
 
     spy.mockClear();
+    spytwo.mockClear();
   }
 });
 // createNewTodo
