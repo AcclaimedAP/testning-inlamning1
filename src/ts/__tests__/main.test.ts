@@ -82,7 +82,7 @@ test("test if createHtml creates the list", () => {
   const text = "test Todo #";
   const oldStorage = localStorage.getItem("todos");
   const oldLiLength = document.querySelectorAll("li").length;
-  const spy = jest.spyOn(main, "toggleTodo");
+
   for (let i = 0; i < amountOfTodos; i += 1) {
     const todoText = text + i;
     let newTodo = new Todo(todoText, false);
@@ -101,4 +101,27 @@ test("test if createHtml creates the list", () => {
   for (let i = oldLength; i < newLength; i += 1) {
     expect(li[i].innerHTML).toBe(text + i);
   }
+});
+
+// toggleTodo
+test("Tests if toggle todo calls two functions", () => {
+  const spy = jest.spyOn(functions, "changeTodo");
+  const spytwo = jest.spyOn(main, "createHtml");
+  let todos: Todo[] = [];
+  const amountOfTodos = 4;
+  const text = "test Todo #";
+  for (let i = 0; i < amountOfTodos; i += 1) {
+    const todoText = text + i;
+    let newTodo = new Todo(todoText, false);
+    todos.push(newTodo);
+  }
+  main.createHtml(todos);
+  for (let i = 0; i < amountOfTodos; i += 1) {
+    main.toggleTodo(todos[i]);
+    expect(todos[i].done).toBeTruthy();
+    expect(spy).toBeCalled();
+    expect(spytwo).toBeCalled();
+  }
+  spy.mockClear();
+  spytwo.mockClear();
 });
