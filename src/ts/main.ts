@@ -58,7 +58,7 @@ export function toggleTodo(todo: Todo) {
 export function displayError(error: string, show: boolean) {
   let errorContainer: HTMLDivElement = document.getElementById("error") as HTMLDivElement;
 
-  // errorContainer.innerHTML = error;
+  errorContainer.innerHTML = error;
 
   if (show) {
     errorContainer.classList.add("show");

@@ -2,11 +2,9 @@
  * @jest-environment jsdom
  */
 
-import { addTodo, changeTodo, removeAllTodos } from "../functions";
 import { Todo } from "../models/Todo";
 import * as functions from "../functions";
 import * as main from "../main";
-import { IAddResponse } from "../models/IAddResult";
 beforeEach(() => {
   document.body.innerHTML = "";
 
@@ -116,12 +114,50 @@ test("Tests if toggle todo calls two functions", () => {
     todos.push(newTodo);
   }
   main.createHtml(todos);
+  //Check if they get "done"
   for (let i = 0; i < amountOfTodos; i += 1) {
     main.toggleTodo(todos[i]);
     expect(todos[i].done).toBeTruthy();
     expect(spy).toBeCalled();
     expect(spytwo).toBeCalled();
   }
+  //Toggle them back
+  for (let i = 0; i < amountOfTodos; i += 1) {
+    main.toggleTodo(todos[i]);
+    expect(todos[i].done).toBeFalsy();
+    expect(spy).toBeCalled();
+    expect(spytwo).toBeCalled();
+  }
   spy.mockClear();
   spytwo.mockClear();
+});
+
+// displayError
+test("display error is hidden by default, is shown when error, and hides again after", () => {
+  const errorText = "error test";
+  let errorContainer: HTMLDivElement = document.getElementById("error") as HTMLDivElement;
+
+  expect(errorContainer.classList.contains("show")).toBeFalsy();
+  main.displayError(errorText, true);
+  expect(errorContainer.classList.contains("show")).toBeTruthy();
+  expect(errorContainer.innerHTML).toBe(errorText);
+  main.displayError("", false);
+  expect(errorContainer.classList.contains("show")).toBeFalsy();
+  expect(errorContainer.innerHTML).not.toBe(errorText);
+});
+
+// clearTodos
+test("Test is clearTodos work, and if it is already cleared, not break", () => {
+  let todos: Todo[] = [];
+  const amountOfTodos = 4;
+  const text = "test Todo #";
+  for (let i = 0; i < amountOfTodos; i += 1) {
+    const todoText = text + i;
+    let newTodo = new Todo(todoText, false);
+    todos.push(newTodo);
+  }
+  main.clearTodos(todos);
+  expect(todos.length).toBe(0);
+  main.clearTodos(todos);
+  expect(todos.length).toBe(0);
 });
