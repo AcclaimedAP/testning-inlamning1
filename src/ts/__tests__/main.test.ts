@@ -4,8 +4,9 @@
 
 import { addTodo, changeTodo, removeAllTodos } from "../functions";
 import { Todo } from "../models/Todo";
+import * as functions from "../functions";
 import * as main from "../main";
-
+import { IAddResponse } from "../models/IAddResult";
 beforeEach(() => {
   document.body.innerHTML = "";
 
@@ -47,25 +48,27 @@ test("check if clear button exists, and clearTodos is called on button click", (
   }
 });
 // createNewTodo
-test("checks createNewTodo to call createHTML", () => {
+test("checks createNewTodo to call AddTodo", () => {
   let todos: Todo[] = [];
   let text = "test todo";
 
-  const spy = jest.spyOn(main, "createHtml").mockReturnValue();
+  const spy = jest.spyOn(functions, "addTodo");
   const length = todos.length;
 
   main.createNewTodo(text, todos);
 
   expect(todos.length).toBe(length + 1);
-
+  expect(spy).toBeCalled();
+  expect(spy).toReturnWith({ success: true, error: "" });
   spy.mockClear();
 });
 
 test("checks failed createNewTodo", () => {
   let todos: Todo[] = [];
   let text = "f";
-  const spy = jest.spyOn(main, "createHtml").mockReturnValue();
+  const spy = jest.spyOn(functions, "addTodo");
   const length = todos.length;
   main.createNewTodo(text, todos);
+  expect(spy).not.toReturnWith({ success: true, error: "" });
   expect(todos.length).toBe(length);
 });
