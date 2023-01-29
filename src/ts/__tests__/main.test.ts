@@ -71,4 +71,34 @@ test("checks failed createNewTodo", () => {
   main.createNewTodo(text, todos);
   expect(spy).not.toReturnWith({ success: true, error: "" });
   expect(todos.length).toBe(length);
+  spy.mockClear();
+});
+
+// CreateHtml
+test("test if createHtml creates the list", () => {
+  let todos: Todo[] = [];
+  const oldLength = todos.length;
+  const amountOfTodos = 4;
+  const text = "test Todo #";
+  const oldStorage = localStorage.getItem("todos");
+  const oldLiLength = document.querySelectorAll("li").length;
+  const spy = jest.spyOn(main, "toggleTodo");
+  for (let i = 0; i < amountOfTodos; i += 1) {
+    const todoText = text + i;
+    let newTodo = new Todo(todoText, false);
+    todos.push(newTodo);
+  }
+
+  main.createHtml(todos);
+  const newLength = todos.length;
+  const newStorage = localStorage.getItem("todos");
+  const li = document.querySelectorAll("li");
+  const newLiLength = li.length;
+
+  expect(newStorage).not.toBe(oldStorage);
+  expect(newLiLength).not.toBe(oldLiLength);
+  expect(newLength).toBe(oldLength + amountOfTodos);
+  for (let i = oldLength; i < newLength; i += 1) {
+    expect(li[i].innerHTML).toBe(text + i);
+  }
 });
