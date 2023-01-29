@@ -149,6 +149,7 @@ test("display error is hidden by default, is shown when error, and hides again a
 // clearTodos
 test("Test is clearTodos work, and if it is already cleared, not break", () => {
   let todos: Todo[] = [];
+  const spy = jest.spyOn(functions, "removeAllTodos");
   const amountOfTodos = 4;
   const text = "test Todo #";
   for (let i = 0; i < amountOfTodos; i += 1) {
@@ -158,6 +159,9 @@ test("Test is clearTodos work, and if it is already cleared, not break", () => {
   }
   main.clearTodos(todos);
   expect(todos.length).toBe(0);
+
   main.clearTodos(todos);
   expect(todos.length).toBe(0);
+  expect(spy).toBeCalled();
+  spy.mockClear();
 });
